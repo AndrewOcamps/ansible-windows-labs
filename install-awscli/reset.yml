@@ -1,0 +1,19 @@
+---
+- name: limpiar laboratorio
+  hosts: win
+  vars:
+  - install_path: C:\install
+  tasks:
+  - name: eliminar estructura de directorio para la instalacion
+    win_file:
+      path: '{{ install_path }}'
+      state: absent
+      recurse: yes
+
+  - name: Configurar variable de entorno Python
+    ansible.windows.win_path:
+      elements: 
+      - '{{ install_path }}\python-3.10.4-awscli\Scripts'
+      - '{{ install_path }}\python-3.10.4-awscli\'
+      state: absent
+      scope: machine

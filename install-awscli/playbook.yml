@@ -1,0 +1,29 @@
+---
+- name: instalacion de python y awscli en windows
+  hosts: win
+  vars:
+  - install_path: C:\install
+  tasks:
+  - name: crear estructura de directorio para la instalacion
+    win_file:
+      path: '{{ install_path }}'
+      state: directory
+
+  - name: copiar ficheros de instalacion python
+    win_copy:
+      src: files/python-3.10.4-awscli.zip
+      dest: '{{ install_path }}'
+
+  - name: instalar ficheros python
+    win_unzip:
+      src: '{{ install_path }}\python-3.10.4-awscli.zip'
+      dest: '{{ install_path }}'
+      recurse: no
+
+  - name: Configurar variable de entorno Python
+    ansible.windows.win_path:
+      elements: 
+      - '{{ install_path }}\python-3.10.4-awscli\Scripts'
+      - '{{ install_path }}\python-3.10.4-awscli\'
+      state: present
+      scope: machine
